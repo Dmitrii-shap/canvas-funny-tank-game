@@ -22,8 +22,4 @@ export class GameObject {
     get direction(): Direction {
         return this._direction;
     }
-
-    set direction(dir: Direction) {
-        this._direction = dir;
-    }
 }

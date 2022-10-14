@@ -29,10 +29,12 @@ export const drawMapService = (bitMap: MapElements[][], boxSize: number, ctx: Ca
 
             ctx.fillRect((j) * boxSize, (i) * boxSize, boxSize, boxSize);
 
-            ctx.fillStyle = "#fff";
-            ctx.fillText(`${i}/${j}`, (j) * boxSize, (i) * boxSize + 12,);
-            ctx.strokeStyle = "#FF0000";
-            ctx.strokeRect((j) * boxSize, (i) * boxSize, boxSize, boxSize);
+            ctx.fillStyle = "#fff"
+
+            // debug elements;
+            // ctx.fillText(`${i}/${j}`, (j) * boxSize, (i) * boxSize + 12,);
+            // ctx.strokeStyle = "#FF0000";
+            // ctx.strokeRect((j) * boxSize, (i) * boxSize, boxSize, boxSize);
         }
     }
 }
