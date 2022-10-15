@@ -6,14 +6,16 @@ export class Bullet extends GameObject {
     private readonly _size: number;
     private readonly _speed: number;
     private readonly _userId: string;
+    private _isDestroy: boolean;
 
-    constructor(x: number, y: number, direction: number, userId = 'player1', size = 3, speed = defaultBulletSpeed) {
+    constructor(x: number, y: number, direction: number, userId: string, size = 3, speed = defaultBulletSpeed) {
         super(x, y, direction);
         this._size = size;
         this._speed = speed;
         this._x = direction === Direction.Right ? x - (size/2) : x;
         this._y = direction === Direction.Down ? y - (size/2) : y
         this._userId = userId;
+        this._isDestroy = false;
     }
 
     get size(): number {
@@ -22,6 +24,10 @@ export class Bullet extends GameObject {
 
     get userId(): string {
         return this._userId;
+    }
+
+    get isDestroy(): boolean {
+        return this._isDestroy;
     }
 
     move(): Bullet {
@@ -45,5 +51,9 @@ export class Bullet extends GameObject {
         }
 
         return this;
+    }
+
+    destroy() {
+        this._isDestroy = true;
     }
 }

@@ -7,6 +7,7 @@ const userSpriteTickCount = 7;
 
 // ITS tank, not USER, tick is draw config, move to draw object
 export class User extends GameObject {
+    private _id: string;
     private _tick: number;
     private _bullets: Bullet[];
     private _speed: number;
@@ -15,8 +16,9 @@ export class User extends GameObject {
     private readonly _bulletCoolDown: number;
     private readonly _maxBullets: number;
 
-    constructor(data: { x: number, y: number, direction: number, size: number, speed?: number }) {
-        super(data.x, data.y, data.direction);
+    constructor(data: { id: string, x: number, y: number, direction: number, size: number, speed?: number }) {
+        super(data.x, data.y, data.direction)
+        this._id = data.id;
         this._tick = 0;
         this._bullets = [];
         this._speed = data.speed || defaultSpeed;
@@ -24,6 +26,10 @@ export class User extends GameObject {
         this._bulletCoolDown = 150;
         this._isBulletCoolDown = false;
         this._maxBullets = 4;
+    }
+
+    get id(): string {
+        return this._id;
     }
 
     get size(): number {
@@ -88,7 +94,7 @@ export class User extends GameObject {
             }
         }
 
-        this.bullets.push(new Bullet(coordinate.x, coordinate.y, this.direction));
+        this.bullets.push(new Bullet(coordinate.x, coordinate.y, this.direction, this.id));
 
         this._isBulletCoolDown = true;
 
