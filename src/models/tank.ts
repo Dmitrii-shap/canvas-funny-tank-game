@@ -5,9 +5,9 @@ import {Direction} from "../enums/direction";
 const defaultSpeed = 2;
 const userSpriteTickCount = 7;
 
-// ITS tank, not USER, tick is draw config, move to draw object
-export class User extends GameObject {
-    private _id: string;
+// tick is draw config, move to draw object
+export class Tank extends GameObject {
+    private readonly _id: string;
     private _tick: number;
     private _bullets: Bullet[];
     private _speed: number;
@@ -48,8 +48,6 @@ export class User extends GameObject {
         return this._bullets;
     }
 
-    // remove setter and bullets = bullets; add destroy function
-    // mb remove bullets from user and add bulletsController.
     set bullets(value: Bullet[]) {
         this._bullets = value;
     }

@@ -24,7 +24,5 @@ module.exports = {
         filename: 'game.js',
         path: path.resolve(__dirname, 'dist'),
     },
-    plugins: [new HtmlWebpackPlugin({
-        inject: 'body'
-    })],
+    plugins: [new HtmlWebpackPlugin({title: "Tank Game"})],
 };

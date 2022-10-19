@@ -1,19 +1,20 @@
 import {MapElements} from "../enums/map-elements";
 import {Bullet} from "./bullet";
-import {User} from "./user";
-import {UserPosition} from "../constants/maps/default-map";
+import {Tank} from "./tank";
+import {MapConfig} from "../constants/maps/default-map";
 import {Direction} from "../enums/direction";
 import {ControlService} from "../controls/control.service";
 
 export class MapState {
     private _bitmap: MapElements[][];
     private _boxSize: number;
-    private _user: User;
+    private _user: Tank;
 
-    constructor({bitmap, boxSize, userPosition}: {bitmap: MapElements[][], boxSize: number, userPosition: UserPosition }) {
+    constructor({mapConfig, boxSize}: {mapConfig: MapConfig, boxSize: number}) {
+        const {bitmap, userPosition} = mapConfig;
         this._bitmap = bitmap;
         this._boxSize = boxSize;
-        this._user = new User({...userPosition, id: 'player1', x: userPosition.x * boxSize, y: userPosition.y * boxSize, size: boxSize})
+        this._user = new Tank({...userPosition, id: 'player1', x: userPosition.x * boxSize, y: userPosition.y * boxSize, size: boxSize})
     }
 
     get bitmap(): MapElements[][] {
@@ -28,7 +29,7 @@ export class MapState {
         return [...this.user.bullets];
     }
 
-    get user(): User {
+    get user(): Tank {
         return this._user;
     }
 
@@ -91,6 +92,7 @@ export class MapState {
         return true;
     }
 
+    // вынести логику столкновения, но у танка и пули не много разная логика
     private userControl() {
         const {bitmap, boxSize, user} = this;
         let {x, y, direction, speed, size} = user;
@@ -109,7 +111,8 @@ export class MapState {
                 direction = Direction.Right;
                 if (x + size + speed < bitmap.length * boxSize &&
                     bitmap[Math.floor((y + user.size - 1) / boxSize)][Math.floor((x + size + speed) / boxSize)] === 0 &&
-                    bitmap[Math.floor((y) / boxSize)][Math.floor((x + size + speed) / boxSize)] === 0) {
+                    bitmap[Math.floor((y) / boxSize)][Math.floor((x + size + speed) / boxSize)] === 0
+                ) {
                     x += speed;
                 }
             }
@@ -117,7 +120,7 @@ export class MapState {
                 direction = Direction.Up;
                 if (y - speed > 0 &&
                     bitmap[Math.floor((y - speed) / boxSize)][Math.floor((x) / boxSize)] === 0 &&
-                    bitmap[Math.floor((y - speed) / boxSize)][Math.floor((x + size) / boxSize)] === 0
+                    bitmap[Math.floor((y - speed) / boxSize)][Math.floor((x + size - 1) / boxSize)] === 0
                 ) {
                     y -= speed;
                 }
@@ -126,7 +129,7 @@ export class MapState {
                 direction = Direction.Down;
                 if (y + size + speed < bitmap.length * boxSize &&
                     bitmap[Math.floor((y + size + speed) / boxSize)][Math.floor((x) / boxSize)] === 0 &&
-                    bitmap[Math.floor((y + size + speed) / boxSize)][Math.floor((x + size) / boxSize)] === 0
+                    bitmap[Math.floor((y + size + speed) / boxSize)][Math.floor((x + size - 1) / boxSize)] === 0
                 ) {
                     y += speed;
                 }

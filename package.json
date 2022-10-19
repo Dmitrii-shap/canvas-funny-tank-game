@@ -2,7 +2,7 @@
   "name": "tank-game",
   "version": "0.0.0",
   "scripts": {
-    "start": "webpack-cli serve --mode=development --env development --config webpack.js",
+    "start": "webpack-cli serve --mode=development --env development",
     "build": "webpack --mode=production --env production --progress"
   },
   "browserslist": [

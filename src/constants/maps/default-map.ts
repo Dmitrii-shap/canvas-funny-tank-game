@@ -7,12 +7,17 @@ export interface UserPosition {
     direction: Direction;
 }
 
-export const defaultMap = {
+export interface MapConfig {
+    userPosition: UserPosition;
+    bitmap: MapElements[][];
+}
+
+export const defaultMap: MapConfig = {
     userPosition: {
-        x: 4,
+        x: 5,
         y: 14,
         direction: Direction.Up,
-    } as UserPosition,
+    },
     bitmap: [
         [MapElements.Empty, MapElements.Empty, MapElements.Empty, MapElements.Empty, MapElements.Empty, MapElements.Empty, MapElements.Empty, MapElements.Empty, MapElements.Empty, MapElements.Empty, MapElements.Empty, MapElements.Empty, MapElements.Empty, MapElements.Empty, MapElements.Empty],
         [MapElements.Empty, MapElements.Empty, MapElements.Empty, MapElements.Empty, MapElements.Empty, MapElements.Empty, MapElements.Empty, MapElements.Empty, MapElements.Empty, MapElements.Empty, MapElements.Empty, MapElements.Empty, MapElements.Empty, MapElements.Empty, MapElements.Empty],
