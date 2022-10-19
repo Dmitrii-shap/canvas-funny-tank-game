@@ -47,9 +47,6 @@ export class ViewController {
             this.boxSize,
             this.boxSize
         );
-
-        this.ctx.fillStyle = '#fff'
-        this.ctx.fillRect(tank.x, tank.y, this.boxSize, this.boxSize)
     }
 
     drawBullets(bullets: Bullet[]) {
