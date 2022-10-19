@@ -3,7 +3,7 @@ import {ControlService} from "./controls/control.service";
 import {MapState} from "./models/map-state";
 import {ViewController} from "./view/view.controller";
 
-const mapState = new MapState({mapConfig: defaultMap, boxSize: 40});
+const mapState = new MapState({mapConfig: defaultMap, boxSize: 32});
 
 const view = new ViewController(mapState);
 
