@@ -1,7 +1,7 @@
 export enum MapElements {
     Empty,
     Brick,
-    Block,
+    Sand,
     Water,
     Tree,
 }

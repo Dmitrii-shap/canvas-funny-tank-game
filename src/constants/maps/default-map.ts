@@ -1,19 +1,9 @@
 import {MapElements} from "../../enums/map-elements";
 import {Direction} from "../../enums/direction";
-
-export interface UserPosition {
-    x: number;
-    y: number;
-    direction: Direction;
-}
-
-export interface MapConfig {
-    userPosition: UserPosition;
-    bitmap: MapElements[][];
-}
+import {MapConfig} from "../../models/map-config";
 
 export const defaultMap: MapConfig = {
-    userPosition: {
+    defaultUserPosition: {
         x: 5,
         y: 14,
         direction: Direction.Up,
@@ -25,14 +15,14 @@ export const defaultMap: MapConfig = {
         [MapElements.Empty, MapElements.Empty, MapElements.Brick, MapElements.Brick, MapElements.Empty, MapElements.Empty, MapElements.Brick, MapElements.Brick, MapElements.Brick, MapElements.Empty, MapElements.Empty, MapElements.Brick, MapElements.Brick, MapElements.Empty, MapElements.Empty],
         [MapElements.Empty, MapElements.Empty, MapElements.Empty, MapElements.Empty, MapElements.Empty, MapElements.Empty, MapElements.Brick, MapElements.Brick, MapElements.Brick, MapElements.Empty, MapElements.Empty, MapElements.Empty, MapElements.Empty, MapElements.Empty, MapElements.Empty],
         [MapElements.Empty, MapElements.Empty, MapElements.Empty, MapElements.Empty, MapElements.Empty, MapElements.Empty, MapElements.Brick, MapElements.Brick, MapElements.Brick, MapElements.Empty, MapElements.Empty, MapElements.Empty, MapElements.Empty, MapElements.Empty, MapElements.Empty],
-        [MapElements.Brick, MapElements.Brick, MapElements.Brick, MapElements.Brick, MapElements.Empty, MapElements.Empty, MapElements.Block, MapElements.Block, MapElements.Block, MapElements.Empty, MapElements.Empty, MapElements.Brick, MapElements.Brick, MapElements.Brick, MapElements.Brick],
-        [MapElements.Block, MapElements.Block, MapElements.Brick, MapElements.Brick, MapElements.Empty, MapElements.Empty, MapElements.Block, MapElements.Block, MapElements.Block, MapElements.Empty, MapElements.Empty, MapElements.Brick, MapElements.Brick, MapElements.Block, MapElements.Block],
+        [MapElements.Brick, MapElements.Brick, MapElements.Brick, MapElements.Brick, MapElements.Empty, MapElements.Empty, MapElements.Sand, MapElements.Sand, MapElements.Sand, MapElements.Empty, MapElements.Empty, MapElements.Brick, MapElements.Brick, MapElements.Brick, MapElements.Brick],
+        [MapElements.Sand, MapElements.Sand, MapElements.Brick, MapElements.Brick, MapElements.Empty, MapElements.Empty, MapElements.Sand, MapElements.Sand, MapElements.Sand, MapElements.Empty, MapElements.Empty, MapElements.Brick, MapElements.Brick, MapElements.Sand, MapElements.Sand],
         [MapElements.Empty, MapElements.Empty, MapElements.Empty, MapElements.Empty, MapElements.Empty, MapElements.Empty, MapElements.Water, MapElements.Water, MapElements.Water, MapElements.Empty, MapElements.Empty, MapElements.Empty, MapElements.Empty, MapElements.Empty, MapElements.Empty],
         [MapElements.Empty, MapElements.Empty, MapElements.Empty, MapElements.Empty, MapElements.Empty, MapElements.Empty, MapElements.Water, MapElements.Water, MapElements.Water, MapElements.Empty, MapElements.Empty, MapElements.Empty, MapElements.Empty, MapElements.Empty, MapElements.Empty],
         [MapElements.Empty, MapElements.Empty, MapElements.Brick, MapElements.Brick, MapElements.Empty, MapElements.Empty, MapElements.Brick, MapElements.Brick, MapElements.Brick, MapElements.Empty, MapElements.Empty, MapElements.Brick, MapElements.Brick, MapElements.Empty, MapElements.Empty],
         [MapElements.Empty, MapElements.Empty, MapElements.Brick, MapElements.Brick, MapElements.Empty, MapElements.Empty, MapElements.Brick, MapElements.Brick, MapElements.Brick, MapElements.Empty, MapElements.Empty, MapElements.Brick, MapElements.Brick, MapElements.Empty, MapElements.Empty],
         [MapElements.Empty, MapElements.Empty, MapElements.Brick, MapElements.Brick, MapElements.Empty, MapElements.Empty, MapElements.Empty, MapElements.Empty, MapElements.Empty, MapElements.Empty, MapElements.Empty, MapElements.Brick, MapElements.Brick, MapElements.Empty, MapElements.Empty],
         [MapElements.Empty, MapElements.Empty, MapElements.Empty, MapElements.Empty, MapElements.Empty, MapElements.Empty, MapElements.Brick, MapElements.Brick, MapElements.Brick, MapElements.Empty, MapElements.Empty, MapElements.Empty, MapElements.Empty, MapElements.Empty, MapElements.Empty],
-        [MapElements.Empty, MapElements.Empty, MapElements.Empty, MapElements.Empty, MapElements.Empty, MapElements.Empty, MapElements.Brick, MapElements.Empty, MapElements.Brick, MapElements.Empty, MapElements.Empty, MapElements.Empty, MapElements.Empty, MapElements.Empty, MapElements.Empty]
+        [MapElements.Tree, MapElements.Tree, MapElements.Empty, MapElements.Empty, MapElements.Empty, MapElements.Empty, MapElements.Brick, MapElements.Empty, MapElements.Brick, MapElements.Empty, MapElements.Empty, MapElements.Empty, MapElements.Empty, MapElements.Tree, MapElements.Tree]
     ]
 };

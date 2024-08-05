@@ -3,19 +3,18 @@ import {defaultBulletSpeed} from "../constants/default-bullet-speed";
 import {GameObject} from "./game-object";
 
 export class Bullet extends GameObject {
-    private readonly _size: number;
-    private readonly _speed: number;
-    private readonly _userId: string;
-    private _isDestroy: boolean;
+    private _isDestroy: boolean = false;
 
-    constructor(x: number, y: number, direction: number, userId: string, size = 3, speed = defaultBulletSpeed) {
-        super(x, y, direction);
-        this._size = size;
-        this._speed = speed;
-        this._x = direction === Direction.Right ? x - (size/2) : x;
-        this._y = direction === Direction.Down ? y - (size/2) : y
-        this._userId = userId;
-        this._isDestroy = false;
+    constructor(x: number,
+                y: number,
+                direction: number,
+                private _userId: string,
+                _size = 3,
+                private _speed = defaultBulletSpeed
+    ) {
+        super(x, y, direction, _size);
+        this._x = direction === Direction.Right ? x - (this.size / 2) : x;
+        this._y = direction === Direction.Down ? y - (this.size / 2) : y
     }
 
     get size(): number {

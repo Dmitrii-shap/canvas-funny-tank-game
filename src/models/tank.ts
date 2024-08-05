@@ -11,18 +11,16 @@ export class Tank extends GameObject {
     private _tick: number;
     private _bullets: Bullet[];
     private _speed: number;
-    private readonly _size: number;
     private _isBulletCoolDown: boolean;
     private readonly _bulletCoolDown: number;
     private readonly _maxBullets: number;
 
     constructor(data: { id: string, x: number, y: number, direction: number, size: number, speed?: number }) {
-        super(data.x, data.y, data.direction)
+        super(data.x, data.y, data.direction, data.size)
         this._id = data.id;
         this._tick = 0;
         this._bullets = [];
         this._speed = data.speed || defaultSpeed;
-        this._size = data.size;
         this._bulletCoolDown = 150;
         this._isBulletCoolDown = false;
         this._maxBullets = 4;
@@ -99,5 +97,8 @@ export class Tank extends GameObject {
         setTimeout(() => {
             this._isBulletCoolDown = false;
         }, this._bulletCoolDown)
+    }
+
+    destroy(): void {
     }
 }

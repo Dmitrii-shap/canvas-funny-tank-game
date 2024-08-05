@@ -10,7 +10,7 @@ export const mapElements = {
         fill: '#FFA500'
     },
     block: {
-        id:  MapElements.Block,
+        id:  MapElements.Sand,
         fill: '#ffe6e3'
     },
     water: {
@@ -19,6 +19,6 @@ export const mapElements = {
     },
     tree: {
         id:  MapElements.Tree,
-        fill: '#008000'
+        fill: 'rgba(0,128,0,0.5)'
     }
 };

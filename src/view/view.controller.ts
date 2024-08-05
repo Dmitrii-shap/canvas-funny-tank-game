@@ -30,9 +30,9 @@ export class ViewController {
         return this.mapState.boxSize;
     }
 
-    //call before remove
-    destroyCanvas() {
+    destroy() {
         this.canvas.remove();
+        this.mapState.destroy();
     }
 
     drawTank(tank: Tank) {
@@ -61,46 +61,58 @@ export class ViewController {
         const bitmap = this.mapState.bitmap;
         const {ctx, boxSize} = this;
 
+        const deferredDrawFns: (() => void)[] = [];
+
         for (let i = 0; i < bitmap.length; i++) {
             for (let j = 0; j < bitmap[i].length; j++) {
                 switch (bitmap[i][j]) {
                     case mapElements.empty.id: {
                         ctx.fillStyle = mapElements.empty.fill;
+                        ctx.fillRect((j) * boxSize, (i) * boxSize, boxSize, boxSize);
                         break;
                     }
                     case mapElements.brick.id: {
                         ctx.fillStyle = mapElements.brick.fill;
+                        ctx.fillRect((j) * boxSize, (i) * boxSize, boxSize, boxSize);
                         break;
                     }
                     case mapElements.block.id: {
                         ctx.fillStyle = mapElements.block.fill;
+                        ctx.fillRect((j) * boxSize, (i) * boxSize, boxSize, boxSize);
                         break;
                     }
                     case mapElements.water.id: {
                         ctx.fillStyle = mapElements.water.fill;
+                        ctx.fillRect((j) * boxSize, (i) * boxSize, boxSize, boxSize);
                         break;
                     }
                     case mapElements.tree.id: {
-                        ctx.fillStyle = mapElements.tree.fill;
+                        deferredDrawFns.push(() => {
+                            ctx.fillStyle = mapElements.tree.fill;
+                            ctx.fillRect((j) * boxSize, (i) * boxSize, boxSize, boxSize);
+                        })
+
                         break;
                     }
                 }
 
-                ctx.fillRect((j) * boxSize, (i) * boxSize, boxSize, boxSize);
-
                 ctx.fillStyle = "#fff"
 
                 // debug elements;
-                // ctx.fillText(`${i}/${j}`, (j) * boxSize, (i) * boxSize + 12,);
-                // ctx.strokeStyle = "#FF0000";
-                // ctx.strokeRect((j) * boxSize, (i) * boxSize, boxSize, boxSize);
+                ctx.fillText(`${i}/${j}`, (j) * boxSize, (i) * boxSize + 12,);
+                ctx.strokeStyle = "#FF0000";
+                ctx.strokeRect((j) * boxSize, (i) * boxSize, boxSize, boxSize);
             }
         }
+
+        return {deferredDrawFns} as const;
     }
 
     draw() {
-        this.drawMap();
+        const {deferredDrawFns} = this.drawMap();
         this.drawTank(this.mapState.user);
         this.drawBullets(this.mapState.allBullets);
+
+        deferredDrawFns.forEach(fn => fn());
     }
 }
