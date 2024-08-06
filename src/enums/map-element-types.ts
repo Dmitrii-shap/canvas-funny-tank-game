@@ -1,4 +1,4 @@
-export enum MapElements {
+export enum MapElementTypes {
     Empty,
     Brick,
     Sand,

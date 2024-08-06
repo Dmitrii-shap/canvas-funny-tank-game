@@ -1,7 +1,7 @@
-import {MapElements} from "../enums/map-elements";
 import {UserPosition} from "./position";
+import {MapElementTypes} from "../enums/map-element-types";
 
 export interface MapConfig {
     defaultUserPosition: UserPosition;
-    bitmap: MapElements[][];
+    bitmap: MapElementTypes[][];
 }

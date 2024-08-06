@@ -4,15 +4,16 @@ import {Direction} from "../enums/direction";
 
 const defaultSpeed = 2;
 const userSpriteTickCount = 7;
+const defaultBulletCoolDown = 150;
+const defaultMaxBullets = 4;
 
-// tick is draw config, move to draw object
 export class Tank extends GameObject {
     private readonly _id: string;
     private _tick: number;
     private _bullets: Bullet[];
-    private _speed: number;
-    private _isBulletCoolDown: boolean;
-    private readonly _bulletCoolDown: number;
+    private readonly _speed: number;
+    private _isShotCoolDown: boolean;
+    private readonly _shotCoolDown: number;
     private readonly _maxBullets: number;
 
     constructor(data: { id: string, x: number, y: number, direction: number, size: number, speed?: number }) {
@@ -21,9 +22,9 @@ export class Tank extends GameObject {
         this._tick = 0;
         this._bullets = [];
         this._speed = data.speed || defaultSpeed;
-        this._bulletCoolDown = 150;
-        this._isBulletCoolDown = false;
-        this._maxBullets = 4;
+        this._shotCoolDown = defaultBulletCoolDown;
+        this._isShotCoolDown = false;
+        this._maxBullets = defaultMaxBullets;
     }
 
     get id(): string {
@@ -46,14 +47,12 @@ export class Tank extends GameObject {
         return this._bullets;
     }
 
-    set bullets(value: Bullet[]) {
-        this._bullets = value;
-    }
-
     move(x: number, y: number, direction: number) {
         this._x = x;
         this._y = y;
         this._direction = direction;
+
+        // TODO tick is draw config, move to draw object
         this._tick++;
         if (this._tick >= userSpriteTickCount) {
             this._tick = 0;
@@ -61,44 +60,44 @@ export class Tank extends GameObject {
     }
 
     shot() {
-        if (this.bullets.length >= this._maxBullets || this._isBulletCoolDown) {
+        if (this.bullets.length >= this._maxBullets || this._isShotCoolDown) {
             return;
         }
 
-        const coordinate = {} as { x: number, y: number };
-
-        switch (this.direction) {
-            case Direction.Right: {
-                coordinate.x = this.x + this.size;
-                coordinate.y = this.y + this.size / 2;
-                break;
-            }
-            case Direction.Left: {
-                coordinate.x = this.x;
-                coordinate.y = this.y + this.size / 2;
-                break;
-            }
-            case Direction.Down: {
-                coordinate.x = this.x + this.size / 2;
-                coordinate.y = this.y + this.size;
-                break;
-            }
-            case Direction.Up: {
-                coordinate.x = this.x + this.size / 2;
-                coordinate.y = this.y;
-                break;
-            }
-        }
-
+        const coordinate = this.createBulletCoordinate;
         this.bullets.push(new Bullet(coordinate.x, coordinate.y, this.direction, this.id));
 
-        this._isBulletCoolDown = true;
+        this._isShotCoolDown = true;
 
         setTimeout(() => {
-            this._isBulletCoolDown = false;
-        }, this._bulletCoolDown)
+            this._isShotCoolDown = false;
+        }, this._shotCoolDown)
     }
 
     destroy(): void {
+    }
+
+    removeDestroyedBullet(): void {
+        this._bullets = this._bullets.filter(item => !item.isDestroy);
+    }
+
+    private get createBulletCoordinate() {
+        switch (this.direction) {
+            case Direction.Right: {
+                return {x: this.x + this.size, y: this.y + this.size / 2}
+            }
+
+            case Direction.Left: {
+                return {x: this.x, y: this.y + this.size / 2}
+            }
+
+            case Direction.Up: {
+                return {x: this.x + this.size / 2, y: this.y}
+            }
+
+            case Direction.Down: {
+                return {x: this.x + this.size / 2, y: this.y + this.size}
+            }
+        }
     }
 }

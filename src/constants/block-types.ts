@@ -1,5 +1,5 @@
-import {MapElements} from "../enums/map-elements";
+import {MapElementTypes} from "../enums/map-element-types";
 
-export const canTankMoveMapElements = new Set([MapElements.Empty, MapElements.Tree, MapElements.Sand]);
+export const canTankMoveMapElements = new Set<MapElementTypes>([MapElementTypes.Empty, MapElementTypes.Tree, MapElementTypes.Sand]);
 
-export const canBulletMoveMapElements = new Set([MapElements.Empty, MapElements.Tree, MapElements.Sand, MapElements.Water]);
+export const canBulletMoveMapElements = new Set<MapElementTypes>([MapElementTypes.Empty, MapElementTypes.Tree, MapElementTypes.Sand, MapElementTypes.Water]);

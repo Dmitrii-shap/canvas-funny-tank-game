@@ -2,54 +2,47 @@ import {MapState} from "../models/map-state";
 import userTank from "../../img/userTank.png";
 import {Tank} from "../models/tank";
 import {Bullet} from "../models/bullet";
-import {mapElements} from "./constants/map-elements";
+import {mapElementDrow} from "./constants/map-element-drow";
+
+const tankSpriteImageSize = 32;
 
 export class ViewController {
-    canvas: HTMLCanvasElement;
-    mapState: MapState;
-    tanksSprite: HTMLImageElement;
+    private readonly canvas: HTMLCanvasElement;
+    private readonly tanksSprite: HTMLImageElement;
 
-    constructor(mapState: MapState) {
-        this.mapState = mapState;
-
+    constructor(private mapState: MapState) {
         const canvas = document.createElement('canvas');
-        canvas.width = mapState.bitmap[0].length * mapState.boxSize;
-        canvas.height = mapState.bitmap.length * mapState.boxSize;
+        canvas.width = mapState.mapElements[0].length * mapState.boxSize;
+        canvas.height = mapState.mapElements.length * mapState.boxSize;
         document.body.appendChild(canvas);
         this.canvas = canvas;
 
-        this.tanksSprite = new Image(mapState.boxSize, mapState.boxSize);
+        this.tanksSprite = new Image();
         this.tanksSprite.src = userTank;
     }
 
-    get ctx(): CanvasRenderingContext2D {
+    private get ctx(): CanvasRenderingContext2D {
         return this.canvas.getContext('2d');
     }
 
-    get boxSize(): number {
+    private get boxSize(): number {
         return this.mapState.boxSize;
     }
 
-    destroy() {
-        this.canvas.remove();
-        this.mapState.destroy();
-    }
-
-    drawTank(tank: Tank) {
-        const spriteImageSize = 32;
+    private drawTank(tank: Tank) {
         this.ctx.drawImage(this.tanksSprite,
-            tank.tick * spriteImageSize,
-            tank.direction * spriteImageSize,
-            spriteImageSize,
-            spriteImageSize,
+            tank.tick * tankSpriteImageSize,
+            tank.direction * tankSpriteImageSize,
+            tankSpriteImageSize,
+            tankSpriteImageSize,
             tank.x,
             tank.y,
-            this.boxSize,
-            this.boxSize
+            this.mapState.user.size,
+            this.mapState.user.size
         );
     }
 
-    drawBullets(bullets: Bullet[]) {
+    private drawBullets(bullets: Bullet[]) {
         this.ctx.fillStyle = 'red';
 
         bullets.forEach(bullet => {
@@ -57,38 +50,38 @@ export class ViewController {
         })
     }
 
-    drawMap() {
-        const bitmap = this.mapState.bitmap;
+    private drawMap() {
+        const mapElements = this.mapState.mapElements;
         const {ctx, boxSize} = this;
 
         const deferredDrawFns: (() => void)[] = [];
 
-        for (let i = 0; i < bitmap.length; i++) {
-            for (let j = 0; j < bitmap[i].length; j++) {
-                switch (bitmap[i][j]) {
-                    case mapElements.empty.id: {
-                        ctx.fillStyle = mapElements.empty.fill;
+        for (let i = 0; i < mapElements.length; i++) {
+            for (let j = 0; j < mapElements[i].length; j++) {
+                switch (mapElements[i][j].type) {
+                    case mapElementDrow.empty.id: {
+                        ctx.fillStyle = mapElementDrow.empty.fill;
                         ctx.fillRect((j) * boxSize, (i) * boxSize, boxSize, boxSize);
                         break;
                     }
-                    case mapElements.brick.id: {
-                        ctx.fillStyle = mapElements.brick.fill;
+                    case mapElementDrow.brick.id: {
+                        ctx.fillStyle = mapElementDrow.brick.fill;
                         ctx.fillRect((j) * boxSize, (i) * boxSize, boxSize, boxSize);
                         break;
                     }
-                    case mapElements.block.id: {
-                        ctx.fillStyle = mapElements.block.fill;
+                    case mapElementDrow.block.id: {
+                        ctx.fillStyle = mapElementDrow.block.fill;
                         ctx.fillRect((j) * boxSize, (i) * boxSize, boxSize, boxSize);
                         break;
                     }
-                    case mapElements.water.id: {
-                        ctx.fillStyle = mapElements.water.fill;
+                    case mapElementDrow.water.id: {
+                        ctx.fillStyle = mapElementDrow.water.fill;
                         ctx.fillRect((j) * boxSize, (i) * boxSize, boxSize, boxSize);
                         break;
                     }
-                    case mapElements.tree.id: {
+                    case mapElementDrow.tree.id: {
                         deferredDrawFns.push(() => {
-                            ctx.fillStyle = mapElements.tree.fill;
+                            ctx.fillStyle = mapElementDrow.tree.fill;
                             ctx.fillRect((j) * boxSize, (i) * boxSize, boxSize, boxSize);
                         })
 
@@ -99,7 +92,9 @@ export class ViewController {
                 ctx.fillStyle = "#fff"
 
                 // debug elements;
-                ctx.fillText(`${i}/${j}`, (j) * boxSize, (i) * boxSize + 12,);
+                const coord = mapElements[i][j].coordination;
+                // ctx.fillText(`${coord.x}/${coord.y}`, (j) * boxSize, (i) * boxSize + 12,);
+                ctx.fillText(`${coord.x}/${coord.y}`, (j) * boxSize, (i) * boxSize + 12);
                 ctx.strokeStyle = "#FF0000";
                 ctx.strokeRect((j) * boxSize, (i) * boxSize, boxSize, boxSize);
             }
@@ -114,5 +109,10 @@ export class ViewController {
         this.drawBullets(this.mapState.allBullets);
 
         deferredDrawFns.forEach(fn => fn());
+    }
+
+    destroy() {
+        this.canvas.remove();
+        this.mapState.destroy();
     }
 }

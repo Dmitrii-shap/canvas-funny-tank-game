@@ -3,7 +3,7 @@ import {Direction} from "../enums/direction";
 export abstract class GameObject {
     protected _x: number;
     protected _y: number;
-    protected _direction: Direction;
+    protected _direction?: Direction;
     protected _size: number;
 
     protected constructor(x: number, y: number, direction: number, size: number) {
