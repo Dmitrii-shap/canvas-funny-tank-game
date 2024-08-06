@@ -53,43 +53,43 @@ export class MapState {
         const bullets = this.allBullets;
 
         bullets.forEach((bullet) => {
-            if (!this.moveBullet(bullet)) {
-                // TODO destroy создает новый объект с анимацией взрыва пули
-                bullet.destroy();
-            }
+            this.moveBullet(bullet)
         })
 
         // Все танки чекают свои пули на дестрой и убивают их;
         this.user.removeDestroyedBullet();
     }
 
-    private moveBullet(bullet: Bullet): boolean {
+    private moveBullet(bullet: Bullet) {
         bullet.move();
         const bulletMapElements = this.getMapElementsByGameObject(bullet);
 
         if (!bulletMapElements.length) {
-            return false;
+            bullet.destroy();
         }
 
         // TODO будем проверять коллизию с другими танками и другими пулями
-        return bulletMapElements.some(item => item && canBulletMoveMapElements.has(item.type));
+        if (!bulletMapElements.every(item => item && canBulletMoveMapElements.has(item.type))) {
+            bullet.destroy();
+        }
     }
 
     private moveUserByControls() {
-        const {mapElements, boxSize, user} = this;
-        let {x, y, direction, speed, size} = user;
+        const {user, boxSize, mapElements} = this;
+        const {x, y, direction, speed, size} = user;
         const newDirection = getDirection(this.controlService);
+        let newX = x;
+        let newY = y;
+
         if (newDirection !== null) {
             // Если мы поменяли направление 1 кадр на разворот
-            if (direction !== newDirection) {
-                direction = newDirection;
-            } else {
+            if (direction === newDirection) {
                 if (this.controlService.cLeft) {
                     if (x - speed > 0 &&
                         canTankMoveMapElements.has(mapElements[Math.floor((y + size - 1) / boxSize)][Math.floor((x - speed) / boxSize)].type) &&
                         canTankMoveMapElements.has(mapElements[Math.floor((y) / boxSize)][Math.floor((x - speed) / boxSize)].type)
                     ) {
-                        x -= speed;
+                        newX -= speed;
                     }
                 }
                 if (this.controlService.cRight) {
@@ -97,7 +97,7 @@ export class MapState {
                         canTankMoveMapElements.has(mapElements[Math.floor((y + user.size - 1) / boxSize)][Math.floor((x + size + speed) / boxSize)].type) &&
                         canTankMoveMapElements.has(mapElements[Math.floor((y) / boxSize)][Math.floor((x + size + speed) / boxSize)].type)
                     ) {
-                        x += speed;
+                        newX += speed;
                     }
                 }
                 if (this.controlService.cUp) {
@@ -105,7 +105,7 @@ export class MapState {
                         canTankMoveMapElements.has(mapElements[Math.floor((y - speed) / boxSize)][Math.floor((x) / boxSize)].type) &&
                         canTankMoveMapElements.has(mapElements[Math.floor((y - speed) / boxSize)][Math.floor((x + size - 1) / boxSize)].type)
                     ) {
-                        y -= speed;
+                        newY -= speed;
                     }
                 }
                 if (this.controlService.cDown) {
@@ -113,12 +113,12 @@ export class MapState {
                         canTankMoveMapElements.has(mapElements[Math.floor((y + size + speed) / boxSize)][Math.floor((x) / boxSize)].type) &&
                         canTankMoveMapElements.has(mapElements[Math.floor((y + size + speed) / boxSize)][Math.floor((x + size - 1) / boxSize)].type)
                     ) {
-                        y += speed;
+                        newY += speed;
                     }
                 }
             }
 
-            user.move(x, y, direction);
+            user.move(newX, newY, newDirection);
         }
 
         if (this.controlService.shot) {
@@ -132,14 +132,14 @@ export class MapState {
     }
 
     private getMapElementByCoordinate(x: number, y: number): MapElement {
-        if (x < 0 || y < 0 || y > this.mapElements.length*this.boxSize || x > this.mapElements[0].length*this.boxSize) {
+        if (x < 0 || y < 0 || y > this.mapElements.length * this.boxSize || x > this.mapElements[0].length * this.boxSize) {
             return null;
         }
 
         return this.mapElements[Math.floor(y / this.boxSize)][Math.floor(x / this.boxSize)];
     }
 
-    private getMapElementsByGameObject(gameObject: GameObject) {
+    private getMapElementsByGameObject(gameObject: Pick<GameObject, "x" | "y" | "size">) {
         return [
             this.getMapElementByCoordinate(gameObject.x, gameObject.y),
             this.getMapElementByCoordinate(gameObject.x + gameObject.size, gameObject.y),
