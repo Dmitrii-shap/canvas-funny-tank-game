@@ -82,21 +82,23 @@ export class Tank extends GameObject {
     }
 
     private get createBulletCoordinate() {
+        const centerTankCorrection = -1.5;
+
         switch (this.direction) {
             case Direction.Right: {
-                return {x: this.x + this.size, y: this.y + this.size / 2}
+                return {x: this.x + this.size, y: centerTankCorrection + this.y + this.size / 2}
             }
 
             case Direction.Left: {
-                return {x: this.x, y: this.y + this.size / 2}
+                return {x: this.x, y: centerTankCorrection + this.y + this.size / 2}
             }
 
             case Direction.Up: {
-                return {x: this.x + this.size / 2, y: this.y}
+                return {x: centerTankCorrection + this.x + this.size / 2, y: this.y}
             }
 
             case Direction.Down: {
-                return {x: this.x + this.size / 2, y: this.y + this.size}
+                return {x: centerTankCorrection + this.x + this.size / 2, y: this.y + this.size}
             }
         }
     }

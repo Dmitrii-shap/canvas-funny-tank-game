@@ -12,8 +12,8 @@ export class ViewController {
 
     constructor(private mapState: MapState) {
         const canvas = document.createElement('canvas');
-        canvas.width = mapState.mapElements[0].length * mapState.boxSize;
-        canvas.height = mapState.mapElements.length * mapState.boxSize;
+        canvas.width = mapState.width;
+        canvas.height = mapState.height;
         document.body.appendChild(canvas);
         this.canvas = canvas;
 
@@ -92,11 +92,11 @@ export class ViewController {
                 ctx.fillStyle = "#fff"
 
                 // debug elements;
-                const coord = mapElements[i][j].coordination;
-                // ctx.fillText(`${coord.x}/${coord.y}`, (j) * boxSize, (i) * boxSize + 12,);
-                ctx.fillText(`${coord.x}/${coord.y}`, (j) * boxSize, (i) * boxSize + 12);
-                ctx.strokeStyle = "#FF0000";
-                ctx.strokeRect((j) * boxSize, (i) * boxSize, boxSize, boxSize);
+                // const coord = mapElements[i][j].coordination;
+                // // ctx.fillText(`${coord.x}/${coord.y}`, (j) * boxSize, (i) * boxSize + 12,);
+                // ctx.fillText(`${coord.x}/${coord.y}`, (j) * boxSize, (i) * boxSize + 12);
+                // ctx.strokeStyle = "#FF0000";
+                // ctx.strokeRect((j) * boxSize, (i) * boxSize, boxSize, boxSize);
             }
         }
 

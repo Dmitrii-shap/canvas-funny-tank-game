@@ -10,6 +10,8 @@ import {GameObject} from "./game-object";
 export class MapState {
     private readonly _mapElements: MapElement[][];
     private readonly _user: Tank;
+    private _width: number;
+    private _height: number;
 
     constructor(mapConfig: MapConfig,
                 private readonly _boxSize: number,
@@ -27,6 +29,9 @@ export class MapState {
             size: Math.round(this._boxSize * 0.8),
         });
         this.controlService.init();
+
+        this._width = bitmap[0].length * _boxSize;
+        this._height = bitmap.length * _boxSize;
     }
 
     destroy() {
@@ -47,6 +52,14 @@ export class MapState {
 
     get allBullets(): Bullet[] {
         return [...this.user.bullets];
+    }
+
+    get width(): number {
+        return this._width;
+    }
+
+    get height(): number {
+        return this._height;
     }
 
     private moveAllBullets() {

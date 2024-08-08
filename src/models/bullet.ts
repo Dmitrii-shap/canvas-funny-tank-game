@@ -13,8 +13,8 @@ export class Bullet extends GameObject {
                 private _speed = defaultBulletSpeed
     ) {
         super(x, y, direction, _size);
-        this._x = direction === Direction.Right ? x - (this.size / 2) : x;
-        this._y = direction === Direction.Down ? y - (this.size / 2) : y
+        this._x = direction === Direction.Right ? x - (_size / 2) : x;
+        this._y = direction === Direction.Down ? y - (_size / 2) : y
     }
 
     get size(): number {
