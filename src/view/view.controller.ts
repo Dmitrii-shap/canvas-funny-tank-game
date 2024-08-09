@@ -2,7 +2,7 @@ import {MapState} from "../models/map-state";
 import userTank from "../../img/userTank.png";
 import {Tank} from "../models/tank";
 import {Bullet} from "../models/bullet";
-import {mapElementDrow} from "./constants/map-element-drow";
+import {mapElementDraw} from "./constants/map-element-draw";
 
 const tankSpriteImageSize = 32;
 
@@ -50,6 +50,19 @@ export class ViewController {
         })
     }
 
+    private drawMapTexture(texture: typeof mapElementDraw.water.texture, i: number, j: number) {
+        this.ctx.drawImage(texture,
+            0,
+            0,
+            texture.naturalWidth,
+            texture.naturalWidth,
+            j * this.boxSize,
+            i * this.boxSize,
+            this.boxSize,
+            this.boxSize,
+        );
+    }
+
     private drawMap() {
         const mapElements = this.mapState.mapElements;
         const {ctx, boxSize} = this;
@@ -59,30 +72,31 @@ export class ViewController {
         for (let i = 0; i < mapElements.length; i++) {
             for (let j = 0; j < mapElements[i].length; j++) {
                 switch (mapElements[i][j].type) {
-                    case mapElementDrow.empty.id: {
-                        ctx.fillStyle = mapElementDrow.empty.fill;
+                    case mapElementDraw.empty.id: {
+                        ctx.fillStyle = mapElementDraw.empty.fill;
                         ctx.fillRect((j) * boxSize, (i) * boxSize, boxSize, boxSize);
                         break;
                     }
-                    case mapElementDrow.brick.id: {
-                        ctx.fillStyle = mapElementDrow.brick.fill;
-                        ctx.fillRect((j) * boxSize, (i) * boxSize, boxSize, boxSize);
+                    case mapElementDraw.brick.id: {
+                        ctx.fillStyle = mapElementDraw.brick.fill;
+                        this.drawMapTexture(mapElementDraw.brick.texture, i, j);
                         break;
                     }
-                    case mapElementDrow.block.id: {
-                        ctx.fillStyle = mapElementDrow.block.fill;
-                        ctx.fillRect((j) * boxSize, (i) * boxSize, boxSize, boxSize);
+                    case mapElementDraw.sand.id: {
+                        ctx.fillStyle = mapElementDraw.sand.fill;
+                        this.drawMapTexture(mapElementDraw.sand.texture, i, j);
                         break;
                     }
-                    case mapElementDrow.water.id: {
-                        ctx.fillStyle = mapElementDrow.water.fill;
-                        ctx.fillRect((j) * boxSize, (i) * boxSize, boxSize, boxSize);
+                    case mapElementDraw.water.id: {
+                        ctx.fillStyle = mapElementDraw.water.fill;
+                        this.drawMapTexture(mapElementDraw.water.texture, i, j);
                         break;
                     }
-                    case mapElementDrow.tree.id: {
+                    case mapElementDraw.tree.id: {
+                        ctx.fillStyle = mapElementDraw.tree.fill;
+                        ctx.fillRect((j) * boxSize, (i) * boxSize, boxSize, boxSize);
                         deferredDrawFns.push(() => {
-                            ctx.fillStyle = mapElementDrow.tree.fill;
-                            ctx.fillRect((j) * boxSize, (i) * boxSize, boxSize, boxSize);
+                            this.drawMapTexture(mapElementDraw.tree.texture, i, j);
                         })
 
                         break;
